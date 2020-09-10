@@ -56,7 +56,8 @@ export type Middleware = (
 ) => ResponseData | Promise<ResponseData>;
 
 export interface Configuration {
-  enableFallback: boolean;
+  enableFallback: boolean;  
   ignoreMiddlewareIfFallback: boolean;
   middleware: Middleware;
+  suppressRealFetchWarning: boolean;
 }
