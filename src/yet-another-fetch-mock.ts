@@ -24,7 +24,8 @@ import MockContext from './mock-context';
 const defaultConfiguration: Configuration = {
   enableFallback: true,
   ignoreMiddlewareIfFallback: false,
-  middleware: (request, response) => response
+  middleware: (request, response) => response,
+  suppressRealFetchWarning: false
 };
 
 class FetchMock {
@@ -100,9 +101,11 @@ class FetchMock {
 
     if (typeof matchingRoute === 'undefined') {
       if (this.configuration.enableFallback) {
-        console.warn(
-          `Did not find any matching route for: ${method.toUpperCase()} ${url}. Defaulting to the real fetch-implementation.`
-        );
+        if(!this.configuration.suppressRealFetchWarning) {
+          console.warn(
+            `Did not find any matching route for: ${method.toUpperCase()} ${url}. Defaulting to the real fetch-implementation.`
+          );
+        }
         response = this.realFetch.call(this.scope, input, init);
         if (this.configuration.ignoreMiddlewareIfFallback) {
           return response as Promise<Response>;
